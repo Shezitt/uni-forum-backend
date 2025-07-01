@@ -11,7 +11,7 @@ export const getRepliesByPostId = async (postId) => {
 export const createReply = async (content, authorId, postId) => {
     const result = await pool.query(
         'INSERT INTO replies (content, author_id, post_id) VALUES ($1, $2, $3) RETURNING *',
-        [content, authorId,postId]
+        [content, authorId, postId]
     );
     return result.rows[0];
 };
