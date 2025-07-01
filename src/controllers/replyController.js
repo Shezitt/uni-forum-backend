@@ -1,4 +1,5 @@
 import { getRepliesByPostId, createReply } from '../models/replyModel.js';
+import { getPostById } from '../models/postModel.js';
 
 export const getReplies = async (req, res, next) => {
     try {
@@ -15,13 +16,21 @@ export const addReply = async (req, res, next) => {
         const { content, author_id } = req.body;
         const { postId } = req.params;
 
+        const post = await getPostById(postId);
+
+        if (!post) {
+            const error = new Error('Post not found.');
+            error.statusCode = 404;
+            throw error;
+        }
+
         if (!content || !author_id) {
             const error = new Error('Content and author are required.');
             error.statusCode = 400;
             throw error;
         }
 
-        const newReply = createReply(content, author_id, postId);
+        const newReply = await createReply(content, author_id, postId);
         res.status(201).json(newReply);
 
     } catch(err) {
