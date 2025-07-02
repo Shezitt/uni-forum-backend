@@ -1,7 +1,10 @@
 import pool from '../config/db.js';
 
-export const getAllUsers = async () => {
-    const result = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
+export const getAllUsers = async (limit = 10, offset = 0) => {
+    const result = await pool.query(
+        'SELECT * FROM users ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+        [limit, offset]
+    );
     return result.rows;
 };
 

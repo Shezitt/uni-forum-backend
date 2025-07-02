@@ -1,8 +1,15 @@
 import { getAllPosts, createPost } from '../models/postModel.js';
 
-export const getPosts = async (req, res) => {
-    const posts = await getAllPosts();
-    res.json(posts);
+export const getPosts = async (req, res, next) => {
+    try {
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = parseInt(req.query.offset) || 0;
+
+        const posts = await getAllPosts(limit, offset);
+        res.json(posts);
+    } catch(err) {
+        next(err);
+    }
 };
 
 export const addPost = async (req, res, next) => {
