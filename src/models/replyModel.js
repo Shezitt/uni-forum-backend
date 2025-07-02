@@ -1,9 +1,9 @@
 import pool from '../config/db.js';
 
-export const getRepliesByPostId = async (postId) => {
+export const getRepliesByPostId = async (postId, limit = 10, offset = 0) => {
     const result = await pool.query(
-        'SELECT * FROM replies WHERE post_id = $1 ORDER BY created_at DESC',
-        [postId]
+        'SELECT * FROM replies WHERE post_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
+        [postId, limit, offset]
     );
     return result.rows;
 };

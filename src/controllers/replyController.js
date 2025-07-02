@@ -4,7 +4,9 @@ import { getPostById } from '../models/postModel.js';
 export const getReplies = async (req, res, next) => {
     try {
         const { postId } = req.params;
-        const replies = await getRepliesByPostId(postId);
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = parseInt(req.query.offset) || 0;
+        const replies = await getRepliesByPostId(postId, limit, offset);
         res.json(replies);
     } catch(err) {
         next(err);
