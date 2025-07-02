@@ -24,12 +24,6 @@ export const addReply = async (req, res, next) => {
             throw error;
         }
 
-        if (!content || !author_id) {
-            const error = new Error('Content and author are required.');
-            error.statusCode = 400;
-            throw error;
-        }
-
         const newReply = await createReply(content, author_id, postId);
         res.status(201).json(newReply);
 
