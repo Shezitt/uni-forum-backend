@@ -23,3 +23,19 @@ export const getPostById = async (postId) => {
     );
     return result.rows[0];
 };
+
+export const deletePostById = async (postId) => {
+    const result = await pool.query(
+        'DELETE FROM posts WHERE id = $1 RETURNING *',
+        [postId]
+    );
+    return result.rows[0];
+};
+
+export const updatePostById = async (postId, title, content) => {
+    const result = await pool.query(
+        'UPDATE posts SET title = $1, content = $2, updated_at = NOW() WHERE id = $3 RETURNING *',
+        [title, content, postId]
+    );
+    return result.rows[0];
+};
