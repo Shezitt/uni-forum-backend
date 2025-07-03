@@ -1,4 +1,6 @@
-import { createUser } from "../models/userModel.js";
+import { createUser, getUserByEmail } from "../models/userModel.js";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -14,6 +16,33 @@ export const registerUser = async (req, res, next) => {
                 email: user.email
             }
         });
+
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const loginUser = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json( { message: 'Invalid credentials' } );
+        }
+
+        const token = jwt.sign(
+            { userId: user.id, name: user.name },
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        );
+
+        res.json({ token });
 
     } catch(err) {
         next(err);
