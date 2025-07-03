@@ -1,4 +1,4 @@
-import { getAllPosts, getPostById, createPost, deletePostById } from '../models/postModel.js';
+import { getAllPosts, getPostById, createPost, deletePostById, updatePostById } from '../models/postModel.js';
 
 export const getPosts = async (req, res, next) => {
     try {
@@ -41,6 +41,29 @@ export const deletePost = async (req, res, next) => {
 
         const deletedPost = await deletePostById(postId);
         res.json({ message: 'Post deleted successfully', post: deletedPost });
+
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const updatePost = async (req, res, next) => {
+    try {
+        const { postId } = req.params;
+        const userId = req.user.userId;
+        const { title, content } = req.body;
+
+        const post = await getPostById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        if (post.author_id !== userId) {
+            return res.status(403).json({ message: 'You are not allowed to update this post' });
+        }
+
+        const updatedPost = await updatePostById(postId, title, content);
+        res.json({ message: 'Post updated successfully', post: updatedPost });
 
     } catch(err) {
         next(err);
