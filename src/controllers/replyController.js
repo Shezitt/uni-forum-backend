@@ -15,7 +15,8 @@ export const getReplies = async (req, res, next) => {
 
 export const addReply = async (req, res, next) => {
     try {
-        const { content, author_id } = req.body;
+        const { content } = req.body;
+        const author_id = req.user.userId;
         const { postId } = req.params;
 
         const post = await getPostById(postId);

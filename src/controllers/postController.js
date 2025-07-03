@@ -14,7 +14,8 @@ export const getPosts = async (req, res, next) => {
 
 export const addPost = async (req, res, next) => {
     try {
-        const { title, content, author_id } = req.body;
+        const { title, content } = req.body;
+        const author_id = req.user.userId;
 
         const newPost = await createPost(title, content, author_id);
         res.status(201).json(newPost);
