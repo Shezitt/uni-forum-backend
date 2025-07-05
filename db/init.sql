@@ -23,3 +23,17 @@ CREATE TABLE IF NOT EXISTS replies (
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS post_likes (
+  id SERIAL PRIMARY KEY,
+  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(post_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS reply_likes (
+  id SERIAL PRIMARY KEY,
+  reply_id INTEGER REFERENCES replies(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(reply_id, user_id)
+);
