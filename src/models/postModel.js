@@ -39,3 +39,11 @@ export const updatePostById = async (postId, title, content) => {
     );
     return result.rows[0];
 };
+
+export const getPostsByFacultyId = async (facultyId) => {
+    const result = await pool.query(
+        'SELECT * FROM posts WHERE faculty_id = $1 ORDER BY created_at DESC',
+        [facultyId]
+    );
+    return result.rows;
+};

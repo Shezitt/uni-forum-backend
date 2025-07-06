@@ -1,5 +1,5 @@
 import { getFacultyById } from '../models/facultyModel.js';
-import { getAllPosts, getPostById, createPost, deletePostById, updatePostById } from '../models/postModel.js';
+import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId } from '../models/postModel.js';
 
 export const getPosts = async (req, res, next) => {
     try {
@@ -71,6 +71,16 @@ export const updatePost = async (req, res, next) => {
         const updatedPost = await updatePostById(postId, title, content);
         res.json({ message: 'Post updated successfully', post: updatedPost });
 
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const listPostsByFaculty = async (req, res, next) => {
+    try {
+        const { facultyId } = req.params;
+        const posts = await getPostsByFacultyId(facultyId);
+        res.json(posts);
     } catch(err) {
         next(err);
     }
