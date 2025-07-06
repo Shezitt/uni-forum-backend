@@ -8,5 +8,5 @@ export const createUserSchema = Joi.object({
 
 export const updateProfileSchema = Joi.object({
     bio: Joi.string().max(500),
-    avatar_url: Joi.string().uri()
+    avatar_url: Joi.string().url()
 });
