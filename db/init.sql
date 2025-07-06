@@ -3,7 +3,10 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  bio TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS posts (
