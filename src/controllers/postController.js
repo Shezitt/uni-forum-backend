@@ -1,3 +1,4 @@
+import { getFacultyById } from '../models/facultyModel.js';
 import { getAllPosts, getPostById, createPost, deletePostById, updatePostById } from '../models/postModel.js';
 
 export const getPosts = async (req, res, next) => {
@@ -14,10 +15,15 @@ export const getPosts = async (req, res, next) => {
 
 export const addPost = async (req, res, next) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, faculty_id } = req.body;
         const author_id = req.user.userId;
 
-        const newPost = await createPost(title, content, author_id);
+        const faculty = await getFacultyById(faculty_id);
+        if (!faculty) {
+            return res.status(404).json({ message: 'Faculty not found' });
+        } 
+
+        const newPost = await createPost(title, content, author_id, faculty_id);
         res.status(201).json(newPost);
 
     } catch(err) {

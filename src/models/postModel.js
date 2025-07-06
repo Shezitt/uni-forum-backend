@@ -8,10 +8,10 @@ export const getAllPosts = async (limit = 10, offset = 0) => {
     return result.rows;
 };
 
-export const createPost = async (title, content, authorId) => {
+export const createPost = async (title, content, authorId, faculty_id) => {
     const result = await pool.query(
-        'INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING *',
-        [title, content, authorId]
+        'INSERT INTO posts (title, content, author_id, faculty_id) VALUES ($1, $2, $3, $4) RETURNING *',
+        [title, content, authorId, faculty_id]
     );
     return result.rows[0];
 };
