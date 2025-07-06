@@ -37,3 +37,12 @@ CREATE TABLE IF NOT EXISTS reply_likes (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   UNIQUE(reply_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  reply_id INTEGER REFERENCES replies(id) ON DELETE CASCADE,
+  author_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
