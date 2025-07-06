@@ -79,7 +79,10 @@ export const updatePost = async (req, res, next) => {
 export const listPostsByFaculty = async (req, res, next) => {
     try {
         const { facultyId } = req.params;
-        const posts = await getPostsByFacultyId(facultyId);
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = parseInt(req.query.offset) || 0;
+
+        const posts = await getPostsByFacultyId(facultyId, limit, offset);
         res.json(posts);
     } catch(err) {
         next(err);

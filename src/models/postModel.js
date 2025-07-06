@@ -40,10 +40,10 @@ export const updatePostById = async (postId, title, content) => {
     return result.rows[0];
 };
 
-export const getPostsByFacultyId = async (facultyId) => {
+export const getPostsByFacultyId = async (facultyId, limit = 10, offset = 0) => {
     const result = await pool.query(
-        'SELECT * FROM posts WHERE faculty_id = $1 ORDER BY created_at DESC',
-        [facultyId]
+        'SELECT * FROM posts WHERE faculty_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
+        [facultyId, limit, offset]
     );
     return result.rows;
 };
