@@ -7,3 +7,11 @@ export const createComment = async (content, replyId, authorId) => {
     );
     return result.rows[0];
 };
+
+export const getCommentsByReplyId = async (replyId) => {
+    const result = await pool.query(
+        'SELECT * FROM comments WHERE reply_id = $1 ORDER BY created_at ASC',
+        [replyId]  
+    );
+    return result.rows;
+};
