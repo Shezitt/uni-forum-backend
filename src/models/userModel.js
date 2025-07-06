@@ -27,3 +27,19 @@ export const createUser = async (name, email, password) => {
     );
     return result.rows[0];
 };
+
+export const updateUserProfile = async (userId, bio, avatarUrl) => {
+    const result = await pool.query(
+        'UPDATE users SET bio = COALESCE($1, bio), avatar_url = COALESCE($2, avatar_url), updated_at = NOW() WHERE id = $3 RETURNING *',
+        [bio ?? null, avatarUrl ?? null, userId]
+    );
+    return result.rows[0];
+}
+
+export const getUserProfileById = async (userId) => {
+    const result = await pool.query(
+        'SELECT id, name, bio, avatar_url FROM users WHERE id = $1',
+        [userId]
+    );
+    return result.rows[0];
+};

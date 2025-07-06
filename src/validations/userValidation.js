@@ -5,3 +5,8 @@ export const createUserSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(100).required()
 }); 
+
+export const updateProfileSchema = Joi.object({
+    bio: Joi.string().max(500),
+    avatar_url: Joi.string().uri()
+});
