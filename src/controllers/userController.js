@@ -1,4 +1,4 @@
-import { getAllUsers, createUser, updateUserProfile } from '../models/userModel.js';
+import { getAllUsers, createUser, updateUserProfile, getUserProfileById } from '../models/userModel.js';
 
 export const getUsers = async (req, res, next) => {
     try {
@@ -31,6 +31,22 @@ export const updateProfile = async (req, res, next) => {
 
         const updatedUser = await updateUserProfile(userId, bio, avatar_url);
         res.json({ message: 'Profile updated successfully', user: updatedUser });
+
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const getProfile = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+
+        const user = await getUserProfileById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
 
     } catch(err) {
         next(err);

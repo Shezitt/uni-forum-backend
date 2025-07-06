@@ -35,3 +35,11 @@ export const updateUserProfile = async (userId, bio, avatarUrl) => {
     );
     return result.rows[0];
 }
+
+export const getUserProfileById = async (userId) => {
+    const result = await pool.query(
+        'SELECT id, name, bio, avatar_url FROM users WHERE id = $1',
+        [userId]
+    );
+    return result.rows[0];
+};
