@@ -15,3 +15,19 @@ export const getCommentsByReplyId = async (replyId) => {
     );
     return result.rows;
 };
+
+export const getCommentById = async (commentId) => {
+    const result = await pool.query(
+        'SELECT * FROM comments WHERE id = $1',
+        [commentId]
+    );
+    return result.rows[0];
+};
+
+export const deleteCommentById = async (commentId) => {
+    const result = await pool.query(
+        'DELETE FROM comments WHERE id = $1 RETURNING *',
+        [commentId]
+    );
+    return result.rows[0];
+};
