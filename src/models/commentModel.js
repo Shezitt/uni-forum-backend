@@ -31,3 +31,11 @@ export const deleteCommentById = async (commentId) => {
     );
     return result.rows[0];
 };
+
+export const updateCommentById = async (commentId, content) => {
+    const result = await pool.query(
+        'UPDATE comments SET content = $1, updated_at = NOW() WHERE id = $2 RETURNING *',
+        [content, commentId]
+    );
+    return result.rows[0];
+};
