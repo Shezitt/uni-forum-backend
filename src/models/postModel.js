@@ -47,3 +47,10 @@ export const getPostsByFacultyId = async (facultyId, limit = 10, offset = 0) => 
     );
     return result.rows;
 };
+
+export const incrementPostViews = async (postId) => {
+    await pool.query(
+        'UPDATE posts SET views = views + 1 WHERE id = $1',
+        [postId]
+    );
+};

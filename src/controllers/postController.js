@@ -1,5 +1,5 @@
 import { getFacultyById } from '../models/facultyModel.js';
-import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId } from '../models/postModel.js';
+import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId, incrementPostViews } from '../models/postModel.js';
 
 export const getPosts = async (req, res, next) => {
     try {
@@ -8,6 +8,24 @@ export const getPosts = async (req, res, next) => {
 
         const posts = await getAllPosts(limit, offset);
         res.json(posts);
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const getPost = async (req, res, next) => {
+    try {
+        const { postId } = req.params;
+
+        const post = await getPostById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        await incrementPostViews(postId);
+
+        res.json(post);
+
     } catch(err) {
         next(err);
     }
