@@ -54,3 +54,11 @@ export const incrementPostViews = async (postId) => {
         [postId]
     );
 };
+
+export const searchPosts = async (searchQuery) => {
+    const result = await pool.query(
+        'SELECT * FROM posts WHERE title ILIKE $1 OR content ILIKE $1 ORDER BY created_at DESC',
+        [`%${searchQuery}%`]
+    );
+    return result.rows;
+};

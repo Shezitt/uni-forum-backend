@@ -1,5 +1,5 @@
 import { getFacultyById } from '../models/facultyModel.js';
-import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId, incrementPostViews } from '../models/postModel.js';
+import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId, incrementPostViews, searchPosts } from '../models/postModel.js';
 
 export const getPosts = async (req, res, next) => {
     try {
@@ -102,6 +102,21 @@ export const listPostsByFaculty = async (req, res, next) => {
 
         const posts = await getPostsByFacultyId(facultyId, limit, offset);
         res.json(posts);
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const searchPostsController = async (req, res, next) => {
+    try {
+        const { q } = req.query;
+        if (!q) {
+            return res.status(400).json({ message: 'Search query required' });
+        }
+
+        const posts = await searchPosts(q);
+        res.json(posts);
+        
     } catch(err) {
         next(err);
     }
