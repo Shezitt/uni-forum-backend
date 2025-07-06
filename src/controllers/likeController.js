@@ -1,5 +1,6 @@
-import { addPostLike, getPostLikeByUser } from '../models/likeModel.js';
+import { addPostLike, getPostLikeByUser, addReplyLike, getReplyLikeByUser } from '../models/likeModel.js';
 import { getPostById } from '../models/postModel.js';
+import { getReplyById } from '../models/replyModel.js';
 
 export const likePost = async (req, res, next) => {
     try {
@@ -18,6 +19,29 @@ export const likePost = async (req, res, next) => {
 
         const like = await addPostLike(postId, userId);
         res.status(201).json({ message: 'Post liked successfully', like });
+
+    } catch(err) {
+        next(err);
+    }
+};
+
+export const likeReply = async (req, res, next) => {
+    try {
+        const { replyId } = req.params;
+        const userId = req.user.userId;
+
+        const reply = await getReplyById(replyId);
+        if (!reply) {
+            return res.status(404).json({ message: 'Reply not found' });
+        }
+
+        const existingLike = await getReplyLikeByUser(replyId, userId);
+        if (existingLike) {
+            return res.status(400).json({ message: 'You already liked this reply' });
+        }
+
+        const like = await addReplyLike(replyId, userId);
+        res.status(201).json({ message: 'Reply liked successfully', like });
 
     } catch(err) {
         next(err);
