@@ -1,11 +1,19 @@
 import pool from '../config/db.js';
+import { getTagsFromPost } from './tagModel.js';
 
 export const getAllPosts = async (limit = 10, offset = 0) => {
     const result = await pool.query(
         'SELECT * FROM posts ORDER BY created_at DESC LIMIT $1 OFFSET $2',
         [limit, offset]
     );
-    return result.rows;
+
+    const posts = [];
+    for (const post of result.rows) {
+        const tags = await getTagsFromPost(post.id);
+        posts.push({ ...post, tags });
+    }
+
+    return posts;
 };
 
 export const createPost = async (title, content, authorId, faculty_id) => {
@@ -21,7 +29,11 @@ export const getPostById = async (postId) => {
         'SELECT * FROM posts WHERE id = $1',
         [postId]
     );
-    return result.rows[0];
+
+    const post = result.rows[0];
+    const tags = await getTagsFromPost(post.id);
+
+    return { ...post, tags };
 };
 
 export const deletePostById = async (postId) => {
@@ -45,7 +57,14 @@ export const getPostsByFacultyId = async (facultyId, limit = 10, offset = 0) => 
         'SELECT * FROM posts WHERE faculty_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
         [facultyId, limit, offset]
     );
-    return result.rows;
+
+    const posts = [];
+    for (const post of result.rows) {
+        const tags = await getTagsFromPost(post.id);
+        posts.push({ ...post, tags });
+    }
+
+    return posts;
 };
 
 export const incrementPostViews = async (postId) => {

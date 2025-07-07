@@ -52,7 +52,7 @@ export const addPost = async (req, res, next) => {
 
         const tagsFromPost = await getTagsFromPost(newPost.id);
 
-        res.status(201).json({ newPost, tags: tagsFromPost });
+        res.status(201).json({ post: newPost, tags: tagsFromPost });
 
     } catch(err) {
         next(err);

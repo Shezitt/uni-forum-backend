@@ -1,4 +1,4 @@
-import { createTag } from '../models/tagModel.js';
+import { createTag, getTags } from '../models/tagModel.js';
 
 export const addTag = async (req, res, next) => {
     try {
@@ -18,3 +18,4 @@ export const listTags = async (req, res, next) => {
         next(err);
     }
 };
+
