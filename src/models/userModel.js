@@ -1,5 +1,5 @@
 import pool from '../config/db.js';
-import bcrypt from 'bcrypt';
+import { hashPassword } from '../services/authService.js';
 
 export const getAllUsers = async (limit = 10, offset = 0) => {
     const result = await pool.query(
@@ -19,7 +19,7 @@ export const getUserByEmail = async (email) => {
 };
 
 export const createUser = async (name, email, password) => {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const result = await pool.query(
         'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', 

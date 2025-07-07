@@ -1,6 +1,5 @@
 import { createUser, getUserByEmail } from "../models/userModel.js";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { verifyPassword, generateToken } from "../services/authService.js";
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -31,16 +30,12 @@ export const loginUser = async (req, res, next) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        const isPasswordCorrect = await verifyPassword(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(401).json( { message: 'Invalid credentials' } );
         }
 
-        const token = jwt.sign(
-            { userId: user.id, name: user.name },
-            process.env.JWT_SECRET,
-            { expiresIn: '2h' }
-        );
+        const token = generateToken({ userId: user.id, name: user.name });
 
         res.json({ token });
 
