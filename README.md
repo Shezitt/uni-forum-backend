@@ -53,6 +53,18 @@ You can get a valid token after logging in (see Auth Routes).
 - `bio` (string, optional)
 - `avatar_url` (string, optional)
 
+### Faculty Routes
+
+**GET** `/faculties`
+
+**POST** `/faculties` (requires auth)
+- `name` (string, required)
+- `description` (string, required)
+
+**GET** `/faculties/:facultyId`
+
+**GET** `/faculties/:facultyId/posts`
+
 ### Post Routes
 
 **GET** `/posts/`
@@ -76,7 +88,8 @@ You can get a valid token after logging in (see Auth Routes).
 #### Update Post
 
 **PATCH** `/posts/:postId` (requires auth)
-- Fields you want to update
+- `title` (string, required)
+- `content` (string, required)
 
 #### Post Replies
 
@@ -118,15 +131,3 @@ You can get a valid token after logging in (see Auth Routes).
 
 **POST** `/tags`
 - `name` (string, required)
-
-### Faculty Routes
-
-**GET** `/faculties`
-
-**POST** `/faculties` (requires auth)
-- `name` (string, required)
-- `description` (string, required)
-
-**GET** `/faculties/:facultyId`
-
-**GET** `/faculties/:facultyId/posts`
