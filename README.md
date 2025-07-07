@@ -1,5 +1,12 @@
 # University Forum API documentation
 
+## Initialization with Docker
+
+Clone the repo and run:
+
+```bash
+docker compose up --build
+```
 
 ## Authentication
 
