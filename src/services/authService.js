@@ -12,3 +12,7 @@ export const verifyPassword = async (password, hashedPassword) => {
 export const generateToken = (payload) => {
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' });
 };
+
+export const getPayload = (token) => {
+    return jwt.verify(token, process.env.JWT_SECRET);
+};
