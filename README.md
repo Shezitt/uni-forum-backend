@@ -2,10 +2,12 @@
 
 ## Initialization with Docker
 
-Clone the repo and run:
+1. Clone the repo.
+2. Create and set an `.env` file (check `.env.example` for more info)
+3. Run:
 
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
 
 ## Authentication
