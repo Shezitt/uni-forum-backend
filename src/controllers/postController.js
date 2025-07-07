@@ -1,5 +1,6 @@
 import { getFacultyById } from '../models/facultyModel.js';
 import { getAllPosts, getPostById, createPost, deletePostById, updatePostById, getPostsByFacultyId, incrementPostViews, searchPosts } from '../models/postModel.js';
+import { addTagToPost, getTagsFromPost } from '../models/tagModel.js';
 
 export const getPosts = async (req, res, next) => {
     try {
@@ -33,7 +34,7 @@ export const getPost = async (req, res, next) => {
 
 export const addPost = async (req, res, next) => {
     try {
-        const { title, content, faculty_id } = req.body;
+        const { title, content, faculty_id, tag_ids } = req.body;
         const author_id = req.user.userId;
 
         const faculty = await getFacultyById(faculty_id);
@@ -42,7 +43,16 @@ export const addPost = async (req, res, next) => {
         } 
 
         const newPost = await createPost(title, content, author_id, faculty_id);
-        res.status(201).json(newPost);
+
+        if (Array.isArray(tag_ids) && tag_ids.length > 0) {
+            for (const tagId of tag_ids) {
+                await addTagToPost(newPost.id, tagId);
+            }
+        }
+
+        const tagsFromPost = await getTagsFromPost(newPost.id);
+
+        res.status(201).json({ newPost, tags: tagsFromPost });
 
     } catch(err) {
         next(err);
