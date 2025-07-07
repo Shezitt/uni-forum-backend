@@ -3,7 +3,16 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
+  bio TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS faculties (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -12,7 +21,9 @@ CREATE TABLE IF NOT EXISTS posts (
   content TEXT NOT NULL,
   author_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  updated_at TIMESTAMP DEFAULT NOW(),
+  faculty_id INTEGER REFERENCES faculties(id) ON DELETE SET NULL,
+  views INTEGER DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS replies (
@@ -36,4 +47,24 @@ CREATE TABLE IF NOT EXISTS reply_likes (
   reply_id INTEGER REFERENCES replies(id) ON DELETE CASCADE,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   UNIQUE(reply_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  reply_id INTEGER REFERENCES replies(id) ON DELETE CASCADE,
+  author_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS tags (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS post_tags (
+  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+  tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (post_id, tag_id)
 );
